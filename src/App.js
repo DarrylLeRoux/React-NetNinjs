@@ -3,28 +3,57 @@ import { useState } from "react";
 import "./App.css";
 
 function App() {
-  const [name, setName] = useState("mario");
+  const [showEvents, setShowEvents] = useState(true);
   const [events, setEvents] = useState([
     { title: "Marios birthday bash", id: 1 },
     { title: "Bowers live stream", id: 2 },
     { title: "Race on moo moo farm", id: 3 },
   ]);
 
-  const handleNameChange = () => {
-    setName("luigi");
+  const handleClick = (id) => {
+    // Access previous estate
+    setEvents((prevEvents) => {
+      return prevEvents.filter((event) => {
+        return id !== event.id;
+      });
+    });
   };
+
+  console.log(showEvents);
 
   return (
     <div className="App">
-      <h1>{name}</h1>
-      <button onClick={handleNameChange}>Change name</button>
-      {/* Render the lists on the page */}
-      {events.map((event) => (
-        // Put a key print on a parent element
-        <div key={event.id}>
-          <h2>{event.title}</h2>
+      {showEvents && (
+        <div>
+          <button
+            onClick={() => {
+              setShowEvents(false);
+            }}
+          >
+            Hide Event
+          </button>
         </div>
-      ))}
+      )}
+      {!showEvents && (
+        <div>
+          <button onClick={() => setShowEvents(true)}>Show Events</button>
+        </div>
+      )}
+      {/* Render the lists on the page */}
+      {showEvents &&
+        events.map((event) => (
+          // Put a key print on a parent element
+          <div key={event.id}>
+            <h2>{event.title}</h2>
+            <button
+              onClick={() => {
+                handleClick(event.id);
+              }}
+            >
+              Delete Event
+            </button>
+          </div>
+        ))}
     </div>
   );
 }
